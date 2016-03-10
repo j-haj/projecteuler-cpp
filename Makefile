@@ -6,8 +6,9 @@ TESTDIR := test
 TARGET := bin/tester
 
 SRCEXT := cpp
-SOURCES := $(SRCDIR)/%.cpp
-OBJECTS := $(BUILDDIR)/%.o
+SOURCES := $(wildcard $(SRCDIR)/*.cpp)
+OBJECTS := $(SOURCES:$(SRCDIR)/%.cpp=$(BUILDDIR)/%.o)
+
 LIB := lib/libgtest.a
 SYS := -isystem include/
 INC := -I include/
@@ -15,10 +16,13 @@ INC := -I include/
 test: $(TARGET)
 	./$(TARGET)
 
-$(TARGET): $(OBJECTS) 
+$(TARGET): $(OBJECTS) $(TESTDIR)/eulertests.o
 	$(CXX) $^ -o $(TARGET) $(LIB)
 
-$(OBJECTS): $(SOURCES) test/eulertests.cpp
+$(TESTDIR)/eulertests.o: $(TESTDIR)/eulertests.cpp
+	@mkdir -p $(BUILDDIR)
+	$(CXX) $(INC) $(SYS) -c $< -o $@
+$(OBJECTS): $(SOURCES) 
 	@mkdir -p $(BUILDDIR)
 	$(CXX) $(INC) $(SYS) -c $< -o $@ 
 
