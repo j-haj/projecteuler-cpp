@@ -1,4 +1,4 @@
-#include "projecteuler/pe1.hpp"
+#include "projecteuler/pe1.h"
 
 int sumLessThanN(int n) {
     int sum = 0;

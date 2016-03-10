@@ -8,15 +8,15 @@ TARGET := bin/tester
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(pathsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
-LIB := -L lib
-SYS := -isystem include/gtest
-INC := -I include/projecteuler
+LIB := lib/libgtest.a
+SYS := -isystem include/
+INC := -I include/
 
 test: $(TARGET)
 	./bin/tester
 
-$(TARGET): $(OBJECTS) $(BUILDDIR)/eulertests.o
-	$(CXX) $^ -o $(TARGET) $(LIB)
+$(TARGET): $(OBJECTS) $(BUILDDIR)/eulertests..o
+	$(CXX) $< -o $(TARGET) $(LIB)
 
 $(BUILDDIR)/eulertests.o: test/eulertests.cpp
 	@mkdir -p $(BUILDDIR)
