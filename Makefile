@@ -1,4 +1,5 @@
 CXX := clang++
+CFLAGS := -std=c++14 -Wall -pedantic
 
 BUILDDIR := build
 SRCDIR := src
@@ -16,15 +17,16 @@ INC := -I include/
 test: $(TARGET)
 	./$(TARGET)
 
-$(TARGET): $(OBJECTS) $(TESTDIR)/eulertests.o
-	$(CXX) $^ -o $(TARGET) $(LIB)
+$(TARGET): $(OBJECTS) $(BUILDDIR)/eulertests.o
+	$(CXX) $(INC) $^ -o $(TARGET) $(LIB)
 
-$(TESTDIR)/eulertests.o: $(TESTDIR)/eulertests.cpp
+$(BUILDDIR)/eulertests.o: $(TESTDIR)/eulertests.cpp
 	@mkdir -p $(BUILDDIR)
-	$(CXX) $(INC) $(SYS) -c $< -o $@
-$(OBJECTS): $(SOURCES) 
+	$(CXX) $(INC) $(SYS) $(CFLAGS) -c $< -o $@
+
+$(BUILDDIR)/%.o: $(SRCDIR)/%.cpp 
 	@mkdir -p $(BUILDDIR)
-	$(CXX) $(INC) $(SYS) -c $< -o $@ 
+	$(CXX) $(INC) $(SYS) $(CFLAGS) -c $< -o $@ 
 
 .PHONY: clean
 clean:
