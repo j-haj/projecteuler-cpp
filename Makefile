@@ -6,25 +6,21 @@ TESTDIR := test
 TARGET := bin/tester
 
 SRCEXT := cpp
-SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
-OBJECTS := $(pathsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
+SOURCES := $(SRCDIR)/%.cpp
+OBJECTS := $(BUILDDIR)/%.o
 LIB := lib/libgtest.a
 SYS := -isystem include/
 INC := -I include/
 
 test: $(TARGET)
-	./bin/tester
+	./$(TARGET)
 
-$(TARGET): $(OBJECTS) $(BUILDDIR)/eulertests..o
-	$(CXX) $< -o $(TARGET) $(LIB)
+$(TARGET): $(OBJECTS) 
+	$(CXX) $^ -o $(TARGET) $(LIB)
 
-$(BUILDDIR)/eulertests.o: test/eulertests.cpp
+$(OBJECTS): $(SOURCES) test/eulertests.cpp
 	@mkdir -p $(BUILDDIR)
-	$(CXX) $(INC) $(SYS) -c test/eulertests.cpp -o $(BUILDDIR)/eulertests.o
-
-$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
-	@mkdir -p $(BUILDDIR)
-	@echo " $(CXX) $(INC) $(SYS) -c $< -o $@"; $(CXX) $(INC) $(SYS) -c $< -o $@
+	$(CXX) $(INC) $(SYS) -c $< -o $@ 
 
 .PHONY: clean
 clean:
