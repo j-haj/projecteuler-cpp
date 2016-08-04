@@ -27,6 +27,9 @@ std::map<int, int> prime_multiplicity_map(int n) {
     return primeMap;
 }
 
+// Returns a map where the keys correspond to prime numbers from the 
+// input maps and the values are the max mulitplicity values for the given
+// key.
 std::map<int, int> max_prime_map(std::vector<std::map<int, int>> maps) {
     std::map<int, int> maxMap;
     for (std::map<int, int>& x : maps) {
@@ -50,7 +53,7 @@ long pe5() {
         primeMaps.push_back(prime_multiplicity_map(i));
     }
     std::map<int, int> maxPrimeMap = max_prime_map(primeMaps);
-    int composite = 1;
+    long composite = 1;
     for (std::map<int, int>::iterator it=maxPrimeMap.begin(); it!=maxPrimeMap.end(); ++it) {
         composite *= pow(it->first, it->second);
     }
